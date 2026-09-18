@@ -100,12 +100,12 @@ static void directory_dump(Directory *d) {
 }
 
 static void directory_free(Directory *d) {
+    if (!d) return;
     for (int i = 0; i < d->count; i++) {
         free(d->by_id[i]->name);
         free(d->by_id[i]);                 
-    }
-    for (int i = 0; i < d->count; i++) {
-        free(d->by_name[i]);               
+        d->by_id[i] = NULL;
+        d->by_name[i] = NULL;
     }
     d->count = 0;
 }
