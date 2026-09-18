@@ -65,7 +65,10 @@ static void list_ensure(IntList *l, size_t need) {
     size_t newcap = l->cap ? l->cap * 2 : 8;
     while (newcap < need) newcap *= 2;
 
-    int *p = realloc(l->data, l->cap * sizeof(int));
+    // fprintf(stderr, "ensure old=%zu new=%zu realloc_bytes=%zu\n",
+    //          l->cap, newcap, l->cap * sizeof(int));
+    // <- 메모리 재할당을 새로운 용량 기준으로 해야 하는데 기존의 용량을 그대로 사용했다!
+    int *p = realloc(l->data, newcap * sizeof(int));    // <- `l->cap`을 `newcap`으로
     if (!p) { perror("realloc"); free(l->data); exit(1); }
 
     l->data = p;
