@@ -65,6 +65,14 @@ static void expand(const Config *c, const char *tmpl, char *out, size_t outcap) 
             key[kl] = '\0';
 
             const char *v = cfg_get(c, key);      
+            //////// 추가 코드 ////////
+            if (!v)
+            {
+                fprintf(stderr, "expand wrong key='%s' v='%p'\n", key, (void*)v);
+                v = "";
+            }
+            /////////////////////////
+            
             size_t vl = strlen(v);                 
             if (o + vl < outcap) { memcpy(out + o, v, vl); o += vl; }
             p = end + 1;
