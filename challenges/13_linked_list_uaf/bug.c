@@ -80,8 +80,9 @@ static Job *filter_jobs(Job *head, int threshold, Audit *audit) {
     while (cur != NULL) {
         if (cur->priority < threshold) {
             audit_add(audit, cur->id);   
+            Job *nx = cur->next;  // <- `free`하기 전에 미리 주소 받기
             job_release(cur);            
-            cur = cur->next;             
+            cur = nx;             // <- `cur->next` 대신 미리 받은 주소로
         } else {
             Job *nx = cur->next;
             cur->next = NULL;
