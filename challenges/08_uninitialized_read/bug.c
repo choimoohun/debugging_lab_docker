@@ -73,7 +73,7 @@ static void dirty_heap(void) {
 
 static int **make_matrix(void) {
 
-    int **rows = (int**)calloc(ROWS, sizeof(int *));
+    int **rows = (int**)calloc(ROWS, sizeof(int *));    // <- `calloc`으로 NULL 초기화
     if (!rows) { perror("calloc"); exit(1); }
 
     for (int i = 0; i < ROWS; i += 2) {
@@ -91,7 +91,7 @@ static int **make_matrix(void) {
 static long row_sum(int **rows, int nrows) {
     long total = 0;
     for (int i = 0; i < nrows; i++) {
-        if (!rows[i]) continue;
+        if (!rows[i]) continue; // <- NULL이면 건너뛰기
         for (int j = 0; j < COLS; j++) {
             total += rows[i][j];      
         }

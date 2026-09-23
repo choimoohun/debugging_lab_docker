@@ -78,9 +78,17 @@ static void row_print(const Row *r) {
 }
 
 static void row_free(Row *r) {
+    //////// 수정 코드 ////////
+    if (!r) return;
+    
+    free(r->base);
+    r->base = NULL;
+    
     for (int i = 0; i < r->n; i++) {
-        free(r->fields[i]);       
+        // free(r->fields[i]);       // <- 모든 요소를 해제하지 말고 주소만 NULL로 변경
+        r->fields[i] = NULL;
     }
+    /////////////////////////
     r->n = 0;
 }
 

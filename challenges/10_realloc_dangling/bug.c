@@ -66,7 +66,7 @@ static void eb_snapshot(EditBuffer *e) {
         int *temp = malloc(e->cap * sizeof(int));
         if (!temp) return;
         memcpy(temp, e->data, e->cap * sizeof(int));
-        e->undo[e->undo_n++] = temp;
+        e->undo[e->undo_n++] = temp;    // <- 바로 e->data의 주소를 넣지 않고 따로 복사본 만들어서 넣기
     }
 }
 
@@ -89,7 +89,7 @@ static void eb_free(EditBuffer *e) {
     free(e->clipboard);
     for (int i = 0; i < e->undo_n; i++) {
         free(e->undo[i]);           
-        e->undo[i] = NULL;
+        e->undo[i] = NULL;  // <- 해제 후 NULL로 만들어주기
     }
     e->undo_n = 0;
     e->data = NULL;

@@ -51,6 +51,7 @@ static unsigned char arena[ARENA_SIZE];    /* 전역(.bss) 아레나 */
 static size_t arena_off = 0;
 
 static void *arena_alloc(size_t n) {
+    //////// 수정 코드 ////////
     if (n <= sizeof(arena) - arena_off)
     {
         void *p = &arena[arena_off];
@@ -61,6 +62,7 @@ static void *arena_alloc(size_t n) {
     {
         return NULL;
     }
+    /////////////////////////
 }
 
 static char *intern(const char *s) {
@@ -84,7 +86,7 @@ int main(void) {
     for (int i = 0; i < 100000; i++) {
         char buf[32];
         snprintf(buf, sizeof buf, "%s-%d", words[i % nwords], i);
-        char *p = intern(buf);                 
+        char *p = intern(buf);                 // <- 임시 포인터를 만들어서 체크해준다
         if (!p)
         {
             fprintf(stderr, "ARENA_SIZE를 넘었기 때문에 중지\n");
