@@ -82,6 +82,14 @@ static void publish(Broker *b, int id, const char *body) {
 static void deliver(Broker *b, Subscriber sub) {
     while (b->head != b->tail) {
         Msg *m = b->inbox[b->head];
+        //////// 추가 코드 ////////
+        for (int i = 0; i < b->log_n; i++) {
+            if (b->log[i] == m) {
+                b->log[i] = NULL;
+                break;
+            }
+        }
+        /////////////////////////
         b->head = (b->head + 1) % QCAP;
         sub(m);                          
     }
@@ -94,7 +102,7 @@ static void on_message(Msg *m) {
 
 static void broker_shutdown(Broker *b) {
     for (int i = 0; i < b->log_n; i++) {
-        msg_free(b->log[i]);             
+        if (b->log[i]) msg_free(b->log[i]);             // <- NULL 건너뛰기
     }
     b->log_n = 0;
 }
