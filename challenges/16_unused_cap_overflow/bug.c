@@ -41,15 +41,21 @@
 
 
 static void append_field(char *buf, size_t cap, size_t *len, const char *field, char sep) {
+    size_t extra = (*len > 0) ? 1 : 0;
+    size_t flen = strlen(field);
+    fprintf(stderr, "try appending: len=%zu cap=%zu +%zu\n", *len, cap, strlen(field));
+    if (*len + extra + flen + 1 > cap)
+    {
+        return;
+    }
     if (*len > 0) {
         buf[(*len)++] = sep;             
     }
-    size_t flen = strlen(field);
     for (size_t i = 0; i < flen; i++) {
         buf[(*len)++] = field[i];         
     }
     buf[*len] = '\0';
-    (void)cap;                            
+    // (void)cap;                            
 }
 
 static void build_record(char *rec, size_t cap) {
@@ -66,7 +72,7 @@ static void build_record(char *rec, size_t cap) {
 }
 
 int main(void) {
-    char rec[24];                         
+    char rec[24];                         // ...?
 
     build_record(rec, sizeof rec);        
 
