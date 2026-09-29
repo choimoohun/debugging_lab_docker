@@ -54,10 +54,11 @@ static void signal_init(Signal *s, size_t n) {
 }
 
 static void signal_trim(Signal *s, size_t keep) {
-    if (keep > s->cap) return;
+    if (keep > s->len) return;  // `len`에만 접근
     double *p = realloc(s->samples, keep * sizeof(double));
-    if (p) s->samples = p;
-    s->cap = keep;                 
+    if (!p) return; // 재할당 실패 처리
+    s->samples = p;
+    s->len = s->cap = keep;                 // s->len에도 동일한 값 대입
 }
 
 static double signal_energy(const Signal *s) {
