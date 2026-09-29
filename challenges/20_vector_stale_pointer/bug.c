@@ -72,17 +72,17 @@ static long hist_total(const Histogram *h) {
 
 int main(void) {
     Histogram h = { .data = NULL, .len = 0, .cap = 0 };
-
+    
     for (int k = 0; k < 200000; k++) hist_add(&h, k);
-
-    Bucket *hot = &h.data[100000];
-    hot->count = 1;
+    
+    size_t idx = 100000;    // realloc으로 배열 주소가 변경될 수 있으므로
+    h.data[idx].count = 1;  // 기존 포인터 대신 인덱스로 접근한다.
 
     for (int k = 200000; k < 600000; k++) hist_add(&h, k);
+    
+    h.data[idx].count += 1000;
 
-    hot->count += 1000;
-
-    printf("hot=%ld total=%ld len=%zu\n", hot->count, hist_total(&h), h.len);
+    printf("hot=%ld total=%ld len=%zu\n", h.data[idx].count, hist_total(&h), h.len);
     free(h.data);
     return 0;
 }
